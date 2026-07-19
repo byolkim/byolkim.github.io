@@ -1,0 +1,14 @@
+# Hugo build output
+/public/
+/resources/_gen/
+.hugo_build.lock
+
+# Pagefind
+/pagefind/
+
+# Node
+/node_modules/
+
+# OS / editor
+.DS_Store
+*.swp

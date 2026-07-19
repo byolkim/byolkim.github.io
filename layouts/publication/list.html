@@ -1,0 +1,211 @@
+{{ define "main" }}
+{{- $owner := site.Params.author -}}
+{{- $areas := site.Data.research_areas.areas -}}
+{{- $items := sort (where site.RegularPages "Section" "in" (slice "publication" "talk")) "Date" "desc" -}}
+
+{{- /* distinct years, desc */ -}}
+{{- $years := slice -}}
+{{- range $items }}{{ $y := .Date.Format "2006" }}{{ if not (in $years $y) }}{{ $years = $years | append $y }}{{ end }}{{ end -}}
+
+{{- /* which tabs have content */ -}}
+{{- $hasArt := false }}{{ $hasPrep := false }}{{ $hasPres := false -}}
+{{- range $items -}}
+  {{- $pt := .Params.publication_types | default slice -}}
+  {{- if eq .Params.status "in_preparation" }}{{ $hasPrep = true }}
+  {{- else if in $pt "presentation" }}{{ $hasPres = true }}
+  {{- else if in $pt "report" }}{{ $hasPrep = true }}
+  {{- else }}{{ $hasArt = true }}{{ end -}}
+{{- end -}}
+
+{{- /* BibTeX map for export */ -}}
+{{- $bib := dict -}}
+{{- range $items -}}
+  {{- $pt := .Params.publication_types | default slice -}}
+  {{- $type := "article" }}{{ $vfield := "journal" -}}
+  {{- if eq .Params.status "in_preparation" }}{{ $type = "unpublished" }}{{ $vfield = "note" }}
+  {{- else if in $pt "presentation" }}{{ $type = "misc" }}{{ $vfield = "howpublished" }}
+  {{- else if in $pt "conference_paper" }}{{ $type = "inproceedings" }}{{ $vfield = "booktitle" }}{{ end -}}
+  {{- $url := "" }}{{ with .Params.links }}{{ $url = (index . 0).url }}{{ end -}}
+  {{- $e := printf "@%s{%s,\n  title = {%s},\n  author = {%s},\n  year = {%d},\n  %s = {%s},\n  url = {%s}\n}\n" $type .File.ContentBaseName .Title (delimit (.Params.authors | default slice) " and ") .Date.Year $vfield (.Params.publication | default "") $url -}}
+  {{- $bib = merge $bib (dict .File.ContentBaseName $e) -}}
+{{- end -}}
+
+<div class="container page-wrap">
+  <h1>{{ .Title }}</h1>
+  <p class="section-intro">Published articles, conference papers, work in preparation, and invited and contributed talks.</p>
+
+  <div class="writings">
+    <nav class="pub-tabs" role="tablist" aria-label="Filter by type">
+      <button class="tab-btn active" data-tab="all" role="tab" aria-selected="true">{{ i18n "all" }}</button>
+      {{ if $hasArt }}<button class="tab-btn" data-tab="articles" role="tab" aria-selected="false">{{ i18n "articles" }}</button>{{ end }}
+      {{ if $hasPrep }}<button class="tab-btn" data-tab="in-preparation" role="tab" aria-selected="false">{{ i18n "in_preparation" }}</button>{{ end }}
+      {{ if $hasPres }}<button class="tab-btn" data-tab="presentations" role="tab" aria-selected="false">{{ i18n "presentations" }}</button>{{ end }}
+    </nav>
+
+    <aside class="filters" aria-label="Filters">
+      <div class="filters__group">
+        <h2>{{ i18n "search" }}</h2>
+        <input type="search" id="pub-search" placeholder="{{ i18n "search_placeholder" }}" aria-label="{{ i18n "search_placeholder" }}">
+      </div>
+      <div class="filters__group">
+        <h2>{{ i18n "filter_research_area" }}</h2>
+        <select id="pub-area" aria-label="{{ i18n "filter_research_area" }}">
+          <option value="all">{{ i18n "filter_all_areas" }}</option>
+          {{ range $areas }}<option value="{{ .slug }}">{{ .name }}</option>{{ end }}
+        </select>
+      </div>
+      <div class="filters__group">
+        <h2>{{ i18n "filter_year" }}</h2>
+        <div class="check-scroll" id="pub-years">
+          {{ range $years }}
+          <div class="check-row"><input type="checkbox" id="yr-{{ . }}" value="{{ . }}"><label for="yr-{{ . }}">{{ . }}</label></div>
+          {{ end }}
+        </div>
+      </div>
+      <button class="btn btn--ghost filters__reset" id="pub-reset" type="button">{{ i18n "reset" }}</button>
+    </aside>
+
+    <div class="pub-main">
+      <div class="results-bar">
+        <span class="result-count" aria-live="polite">{{ len $items }} {{ i18n "results_of" }} {{ len $items }} {{ i18n "results_word" }}</span>
+        <span class="sort-wrap">
+          <label for="pub-sort">Sort</label>
+          <select id="pub-sort">
+            <option value="newest">{{ i18n "newest_first" }}</option>
+            <option value="oldest">{{ i18n "oldest_first" }}</option>
+            <option value="az">{{ i18n "title_az" }}</option>
+            <option value="za">{{ i18n "title_za" }}</option>
+          </select>
+          <button class="chip" id="pub-download" type="button">{{ i18n "download_bibtex" }}</button>
+        </span>
+      </div>
+
+      <div class="pub-list" id="pub-list">
+        {{- range $items -}}
+          {{- $pt := .Params.publication_types | default slice -}}
+          {{- $tab := "articles" -}}
+          {{- if eq .Params.status "in_preparation" }}{{ $tab = "in-preparation" }}
+          {{- else if in $pt "presentation" }}{{ $tab = "presentations" }}
+          {{- else if in $pt "report" }}{{ $tab = "in-preparation" }}{{ end -}}
+          {{- $itemAreas := slice -}}
+          {{- range $areas }}{{ $a := . }}{{ range ($.Params.tags | default slice) }}{{ if in $a.tags . }}{{ if not (in $itemAreas $a.slug) }}{{ $itemAreas = $itemAreas | append $a.slug }}{{ end }}{{ end }}{{ end }}{{ end -}}
+          {{- $search := lower (printf "%s %s %s" .Title (delimit (.Params.authors | default slice) " ") (.Params.publication | default "")) -}}
+          <article class="pub-item" data-tab="{{ $tab }}" data-year="{{ .Date.Format "2006" }}" data-areas="{{ delimit $itemAreas " " }}" data-slug="{{ .File.ContentBaseName }}" data-title="{{ lower .Title }}" data-search="{{ $search }}">
+            <div class="pub-item__cite">
+              <span class="pub-item__meta">
+                {{- range $i, $a := .Params.authors -}}{{ if $i }}, {{ end }}{{ if eq $a $owner }}<strong>{{ $a }}</strong>{{ else }}{{ $a }}{{ end }}{{- end -}}
+                {{ with .Date }} · {{ .Format "2006" }}{{ end }}
+              </span>
+              <span class="pub-item__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></span>
+              {{ with .Params.publication }}<span class="pub-item__venue">{{ . }}</span>{{ end }}
+            </div>
+            <div class="pub-item__links">
+              {{- with .Params.links }}{{ range . }}{{ $ext := hasPrefix .url "http" }}<a href="{{ if $ext }}{{ .url }}{{ else }}{{ .url | relURL }}{{ end }}"{{ if $ext }} rel="noopener" target="_blank"{{ end }}>{{ .name }}</a>{{ end }}{{ end -}}
+              <button class="chip" data-cite="{{ .File.ContentBaseName }}" type="button">{{ i18n "cite" }}</button>
+            </div>
+          </article>
+        {{- end -}}
+      </div>
+      <p class="muted" id="pub-empty" hidden>No results. <button class="chip" id="pub-reset2" type="button">{{ i18n "reset" }}</button></p>
+    </div>
+  </div>
+</div>
+
+<script id="bib-data" type="application/json">{{ $bib | jsonify }}</script>
+<script>
+(function () {
+  var BIB = {};
+  try { BIB = JSON.parse(document.getElementById('bib-data').textContent); } catch (e) {}
+  var list = document.getElementById('pub-list');
+  var items = Array.prototype.slice.call(list.querySelectorAll('.pub-item'));
+  var tabs = document.querySelectorAll('.tab-btn');
+  var searchEl = document.getElementById('pub-search');
+  var areaEl = document.getElementById('pub-area');
+  var yearsWrap = document.getElementById('pub-years');
+  var sortEl = document.getElementById('pub-sort');
+  var countEl = document.querySelector('.result-count');
+  var emptyEl = document.getElementById('pub-empty');
+  var total = items.length;
+  var state = { tab: 'all', q: '', area: 'all', years: [], sort: 'newest' };
+
+  function checkedYears() {
+    return Array.prototype.slice.call(yearsWrap.querySelectorAll('input:checked')).map(function (c) { return c.value; });
+  }
+  function apply() {
+    var visible = 0;
+    items.forEach(function (it) {
+      var okTab = state.tab === 'all' || it.dataset.tab === state.tab;
+      var okQ = !state.q || it.dataset.search.indexOf(state.q) !== -1;
+      var okArea = state.area === 'all' || (' ' + it.dataset.areas + ' ').indexOf(' ' + state.area + ' ') !== -1;
+      var okYear = !state.years.length || state.years.indexOf(it.dataset.year) !== -1;
+      var show = okTab && okQ && okArea && okYear;
+      it.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    countEl.textContent = visible + ' of ' + total + ' results';
+    emptyEl.hidden = visible !== 0;
+    tabs.forEach(function (b) {
+      var on = b.dataset.tab === state.tab;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    syncHash();
+  }
+  function sortItems() {
+    var arr = items.slice();
+    arr.sort(function (a, b) {
+      if (state.sort === 'az') return a.dataset.title.localeCompare(b.dataset.title);
+      if (state.sort === 'za') return b.dataset.title.localeCompare(a.dataset.title);
+      var d = (+a.dataset.year) - (+b.dataset.year);
+      return state.sort === 'oldest' ? d : -d;
+    });
+    arr.forEach(function (el) { list.appendChild(el); });
+  }
+  function syncHash() {
+    var h = state.tab === 'all' ? '' : '#' + state.tab;
+    if (('#' + (location.hash.replace('#',''))) !== (h || '#')) history.replaceState(null, '', h || location.pathname);
+  }
+  tabs.forEach(function (b) { b.addEventListener('click', function () { state.tab = b.dataset.tab; apply(); }); });
+  searchEl.addEventListener('input', function () { state.q = searchEl.value.trim().toLowerCase(); apply(); });
+  areaEl.addEventListener('change', function () { state.area = areaEl.value; apply(); });
+  yearsWrap.addEventListener('change', function () { state.years = checkedYears(); apply(); });
+  sortEl.addEventListener('change', function () { state.sort = sortEl.value; sortItems(); });
+  function reset() {
+    state = { tab: 'all', q: '', area: 'all', years: [], sort: 'newest' };
+    searchEl.value = ''; areaEl.value = 'all'; sortEl.value = 'newest';
+    yearsWrap.querySelectorAll('input:checked').forEach(function (c) { c.checked = false; });
+    sortItems(); apply();
+  }
+  document.getElementById('pub-reset').addEventListener('click', reset);
+  document.getElementById('pub-reset2').addEventListener('click', reset);
+
+  // Cite (copy one) + Download (export visible)
+  function toast(msg) {
+    var t = document.createElement('div'); t.textContent = msg;
+    t.style.cssText = 'position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);background:#2d2926;color:#fff;padding:.5rem .9rem;border-radius:6px;z-index:200;font-size:.9rem';
+    document.body.appendChild(t); setTimeout(function () { t.remove(); }, 1600);
+  }
+  list.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-cite]'); if (!btn) return;
+    var b = BIB[btn.dataset.cite] || '';
+    if (navigator.clipboard) navigator.clipboard.writeText(b).then(function () { toast('BibTeX copied'); }, function () {});
+  });
+  document.getElementById('pub-download').addEventListener('click', function () {
+    var out = items.filter(function (it) { return it.style.display !== 'none'; })
+      .map(function (it) { return BIB[it.dataset.slug] || ''; }).join('\n');
+    var blob = new Blob([out], { type: 'text/plain' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'byol-kim-citations.bib';
+    document.body.appendChild(a); a.click(); a.remove();
+  });
+
+  // On load: honor ?area= query and #tab hash
+  try {
+    var qa = new URLSearchParams(location.search).get('area');
+    if (qa && areaEl.querySelector('option[value="' + qa + '"]')) { state.area = qa; areaEl.value = qa; }
+  } catch (e) {}
+  var h = location.hash.replace('#', '');
+  if (h && document.querySelector('.tab-btn[data-tab="' + h + '"]')) state.tab = h;
+  apply();
+})();
+</script>
+{{ end }}

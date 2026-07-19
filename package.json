@@ -1,0 +1,11 @@
+{
+  "name": "byolkim-github-io",
+  "private": true,
+  "description": "Build tooling for the Pagefind static search index.",
+  "scripts": {
+    "search": "pagefind --site public"
+  },
+  "devDependencies": {
+    "pagefind": "^1.4"
+  }
+}

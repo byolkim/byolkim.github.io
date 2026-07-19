@@ -1,0 +1,15 @@
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <nav aria-label="Footer">
+      {{- range .Site.Menus.main }}
+      <a href="{{ .URL | relLangURL }}">{{ .Name }}</a>
+      {{- end }}
+    </nav>
+    <div class="site-footer__meta">
+      <p>&copy; {{ now.Year }} {{ .Site.Params.author }} · {{ .Site.Params.institution }}</p>
+      {{- if .Site.Params.mysite.credit }}
+      <p class="site-footer__credit">Created using <a href="https://garyking.org/mysite">GaryKing.org/mysite</a></p>
+      {{- end }}
+    </div>
+  </div>
+</footer>

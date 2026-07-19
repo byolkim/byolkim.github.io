@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="container page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="{{ "/" | relURL }}">{{ i18n "back_home" }}</a> / <span aria-current="page">{{ .Title }}</span>
+  </nav>
+  <article class="prose">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    {{- if .Site.Params.cv }}
+    {{- if eq .File.ContentBaseName "bio" }}
+    <p><a class="btn" href="{{ .Site.Params.cv | relURL }}" target="_blank" rel="noopener">Download C.V. (PDF)</a></p>
+    {{- end }}
+    {{- end }}
+  </article>
+</div>
+{{ end }}

@@ -1,0 +1,114 @@
+{{- /*
+  related_finder.html — automatic "See also" cross-linking.
+  Runs at build time on every publication/talk/software page. No scripts, no data files to
+  go stale. Explicit front-matter picks always win; the rest is scored by shared title
+  tokens (+2), shared authors (+1), and shared tags (+2).
+*/ -}}
+{{- $cur := . -}}
+{{- $owner := site.Params.author -}}
+{{- $sections := slice "publication" "talk" "software" -}}
+{{- $all := where site.RegularPages "Section" "in" $sections -}}
+
+{{- /* slug -> page map */ -}}
+{{- $bySlug := dict -}}
+{{- range $all }}{{ $bySlug = merge $bySlug (dict .File.ContentBaseName .) }}{{- end -}}
+{{- $curSlug := $cur.File.ContentBaseName -}}
+
+{{- $stop := slice "a" "an" "and" "the" "of" "for" "in" "on" "to" "with" "by" "at" "as" "is" "are" "be" "or" "from" "into" "using" "via" "new" "not" "no" "it" "its" "we" "our" "their" "you" "your" "this" "that" "these" "those" "but" "if" "than" "then" "so" "can" "will" "would" "could" "should" "may" "might" "also" "more" "most" "some" "all" "any" "each" "every" "who" "whom" "which" "what" "when" "where" "why" "how" "about" "between" "among" "through" "over" "under" "after" "before" "upon" "across" "per" "vs" "de" "la" "les" "et" "du" "inference" "statistical" "statistics" "method" "methods" "model" "models" "approach" "framework" "analysis" -}}
+
+{{- /* tokenize current title */ -}}
+{{- $curToks := slice -}}
+{{- range (split (replaceRE "[^a-z0-9]+" " " (lower $cur.Title)) " ") -}}
+  {{- if and (ge (len .) 3) (not (in $stop .)) -}}{{ $curToks = $curToks | append . }}{{- end -}}
+{{- end -}}
+{{- $curAuthors := $cur.Params.authors | default slice -}}
+{{- $curTags := $cur.Params.tags | default slice -}}
+{{- $curTitleNorm := replaceRE "[^a-z0-9]" "" (lower $cur.Title) -}}
+
+{{- /* collect explicit picks (always win), in order */ -}}
+{{- $explicit := slice -}}
+{{- range (slice "related_papers" "related_talks" "related_software" "related_datasets") -}}
+  {{- with (index $cur.Params .) }}{{ range . }}{{ $explicit = $explicit | append . }}{{ end }}{{ end -}}
+{{- end -}}
+{{- with $cur.Params.related_paper }}{{ $explicit = $explicit | append . }}{{ end -}}
+{{- with $cur.Params.related_dataset }}{{ $explicit = $explicit | append . }}{{ end -}}
+
+{{- $results := slice -}}
+{{- $seen := slice -}}
+{{- $seenTitles := slice -}}
+
+{{- /* helper values for response-pin */ -}}
+{{- $isResponse := findRE "(?i)^(response to|reply to|comment on|rejoinder)" $cur.Title -}}
+
+{{- /* 1) explicit picks */ -}}
+{{- range $i, $slug := $explicit -}}
+  {{- with (index $bySlug $slug) -}}
+    {{- $tn := replaceRE "[^a-z0-9]" "" (lower .Title) -}}
+    {{- if and (ne .File.ContentBaseName $curSlug) (not (in $seenTitles $tn)) -}}
+      {{- $results = $results | append (dict "page" . "score" (sub 100000 $i) "year" .Date.Year) -}}
+      {{- $seen = $seen | append .File.ContentBaseName -}}
+      {{- $seenTitles = $seenTitles | append $tn -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 2 + 3) scored backfill */ -}}
+{{- range $all -}}
+  {{- $p := . -}}
+  {{- $tn := replaceRE "[^a-z0-9]" "" (lower $p.Title) -}}
+  {{- if and (ne $p.File.ContentBaseName $curSlug) (not (in $seen $p.File.ContentBaseName)) (not (in $seenTitles $tn)) -}}
+    {{- $score := 0 -}}
+    {{- /* shared tags +2 */ -}}
+    {{- range ($p.Params.tags | default slice) }}{{ if in $curTags . }}{{ $score = add $score 2 }}{{ end }}{{ end -}}
+    {{- /* shared authors +1 (excluding owner) */ -}}
+    {{- range ($p.Params.authors | default slice) }}{{ if and (ne . $owner) (in $curAuthors .) }}{{ $score = add $score 1 }}{{ end }}{{ end -}}
+    {{- /* shared title tokens +2 */ -}}
+    {{- $ptoks := slice -}}
+    {{- range (split (replaceRE "[^a-z0-9]+" " " (lower $p.Title)) " ") }}{{ if and (ge (len .) 3) (not (in $stop .)) }}{{ $ptoks = $ptoks | append . }}{{ end }}{{ end -}}
+    {{- range $ptoks }}{{ if in $curToks . }}{{ $score = add $score 2 }}{{ end }}{{ end -}}
+    {{- /* response paper: pin subject to top */ -}}
+    {{- if and $isResponse (gt $score 0) }}{{ $score = add $score 100000 }}{{ end -}}
+    {{- if gt $score 0 -}}
+      {{- $results = $results | append (dict "page" $p "score" $score "year" $p.Date.Year "cand" true) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* threshold: 4 normally, relaxed to 2 if fewer than 3 explicit picks */ -}}
+{{- $threshold := 4 -}}
+{{- if lt (len $explicit) 3 }}{{ $threshold = 2 }}{{ end -}}
+
+{{- /* keep explicit (always) + scored above threshold; sort by score, then year, desc */ -}}
+{{- $final := slice -}}
+{{- range $results -}}
+  {{- if or (not .cand) (ge .score $threshold) -}}
+    {{- $final = $final | append (merge . (dict "sortkey" (add (mul .score 100000) .year))) -}}
+  {{- end -}}
+{{- end -}}
+{{- $final = sort $final "sortkey" "desc" -}}
+{{- $final = first 8 $final -}}
+
+{{- if $final -}}
+<section class="gk-see-also" aria-labelledby="see-also-h">
+  <h2 id="see-also-h">{{ i18n "see_also" }}</h2>
+  <ul>
+    {{- range $final -}}
+      {{- $p := .page -}}
+      {{- $pt := $p.Params.publication_types | default slice -}}
+      {{- $label := i18n "kind_paper" -}}
+      {{- if in $pt "data" }}{{ $label = i18n "kind_data" }}
+      {{- else if or (in $pt "book") (in $pt "book_chapter") }}{{ $label = i18n "kind_book" }}
+      {{- else if in $pt "patent" }}{{ $label = "Patent" }}
+      {{- else if in $pt "court_brief" }}{{ $label = "Court Brief" }}
+      {{- else if or (in $pt "software") (eq $p.Section "software") }}{{ $label = i18n "kind_software" }}
+      {{- else if or (in $pt "presentation") (eq $p.Section "talk") }}{{ $label = i18n "kind_presentation" }}
+      {{- else if in $pt "report" }}{{ $label = i18n "kind_report" }}
+      {{- end -}}
+      <li><span class="kind{{ if in $pt "data" }} kind--data{{ else if or (in $pt "software") (eq $p.Section "software") }} kind--software{{ end }}">{{ $label }}</span>
+        <a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+        {{ with $p.Date }}<span class="muted"> · {{ .Format "2006" }}</span>{{ end }}
+      </li>
+    {{- end -}}
+  </ul>
+</section>
+{{- end -}}

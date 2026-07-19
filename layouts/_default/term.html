@@ -1,0 +1,15 @@
+{{ define "main" }}
+<div class="container page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ "/" | relURL }}">{{ i18n "back_home" }}</a> / <a href="{{ "/publication/" | relURL }}">Writings</a> / <span aria-current="page">{{ .Title }}</span></nav>
+  <h1>{{ .Title }}</h1>
+  <p class="section-intro">Work tagged “{{ .Title }}”.</p>
+  <ul class="pub-list">
+    {{- range .Pages.ByDate.Reverse }}
+    <li class="pub-item">
+      <span class="pub-item__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></span>
+      <span class="pub-item__meta">{{ with .Params.publication }}{{ . }}{{ end }}{{ with .Date }} · {{ .Format "2006" }}{{ end }}</span>
+    </li>
+    {{- end }}
+  </ul>
+</div>
+{{ end }}

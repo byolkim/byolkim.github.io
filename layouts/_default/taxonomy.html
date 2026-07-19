@@ -1,0 +1,11 @@
+{{ define "main" }}
+<div class="container page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ "/" | relURL }}">{{ i18n "back_home" }}</a> / <span aria-current="page">{{ .Title }}</span></nav>
+  <h1>Topics</h1>
+  <ul class="people-list">
+    {{- range .Data.Terms.Alphabetical }}
+    <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a> <span class="muted">({{ .Count }})</span></li>
+    {{- end }}
+  </ul>
+</div>
+{{ end }}

@@ -1,0 +1,42 @@
+{{- $site := .Site -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{- $desc := or .Description .Params.summary $site.Params.description -}}
+<title>{{ if .IsHome }}{{ $site.Title }} — {{ $site.Params.title_line }}{{ else }}{{ .Title }} · {{ $site.Title }}{{ end }}</title>
+<meta name="description" content="{{ $desc }}">
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{- /* Open Graph / basic social */ -}}
+<meta property="og:site_name" content="{{ $site.Title }}">
+<meta property="og:title" content="{{ if .IsHome }}{{ $site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:type" content="{{ if .IsHome }}profile{{ else }}article{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+
+{{- /* Favicon (custom BK monogram) */ -}}
+<link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon-32x32.png" | relURL }}">
+<link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
+
+{{- /* Stylesheet */ -}}
+{{- with resources.Get "css/custom.css" }}
+  {{- if hugo.IsProduction }}
+    {{- $css := . | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+  {{- else }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}">
+  {{- end }}
+{{- end }}
+
+{{- with .OutputFormats.Get "rss" }}
+<link rel="alternate" type="application/rss+xml" title="{{ $site.Title }}" href="{{ .Permalink }}">
+{{- end }}
+
+{{- /* GaryKing.org/mysite discovery metadata — invisible, gated by params.mysite.discovery */ -}}
+{{- if $site.Params.mysite.discovery }}
+<meta name="generator" content="Created using GaryKing.org/mysite (https://gking.harvard.edu/mysite)">
+  {{- if .IsHome }}
+    {{- $ld := dict "@context" "https://schema.org" "@type" "Person" "name" $site.Params.author "affiliation" (dict "@type" "Organization" "name" $site.Params.institution) "url" $site.BaseURL "isBasedOn" "https://gking.harvard.edu/mysite" -}}
+<script type="application/ld+json">{{ $ld }}</script>
+  {{- end }}
+{{- end }}

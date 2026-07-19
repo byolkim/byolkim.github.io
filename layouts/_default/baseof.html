@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="{{ or site.LanguageCode "en" }}" class="light">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  {{ partial "components/headers/navbar.html" . }}
+
+  <main id="main">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  {{ partial "site_footer.html" . }}
+  {{ partial "components/search-modal.html" . }}
+
+  <script>
+  (function () {
+    var toggle = document.querySelector('[data-nav-toggle]');
+    var menu = document.getElementById('primary-menu');
+    if (toggle && menu) {
+      toggle.addEventListener('click', function () {
+        var open = menu.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+  })();
+  </script>
+</body>
+</html>

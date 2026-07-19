@@ -1,0 +1,19 @@
+{{ define "main" }}
+<div class="container page-wrap">
+  <h1>{{ .Title }}</h1>
+  <p class="section-intro">Code accompanying the papers — implementations you can read, run, and build on.</p>
+  <ul class="pub-list">
+    {{- range sort (where site.RegularPages "Section" "software") "Date" "desc" }}
+    <li class="pub-item">
+      <div class="pub-item__cite">
+        <span class="pub-item__title"><span class="kind kind--software">{{ i18n "kind_software" }}</span> <a href="{{ .RelPermalink }}">{{ .Title }}</a></span>
+        {{ with .Params.summary }}<div class="pub-item__meta">{{ . }}</div>{{ end }}
+      </div>
+      <div class="pub-item__links">
+        {{- with .Params.links }}{{ range . }}{{ $ext := hasPrefix .url "http" }}<a href="{{ if $ext }}{{ .url }}{{ else }}{{ .url | relURL }}{{ end }}"{{ if $ext }} rel="noopener" target="_blank"{{ end }}>{{ .name }}</a>{{ end }}{{ end }}
+      </div>
+    </li>
+    {{- end }}
+  </ul>
+</div>
+{{ end }}

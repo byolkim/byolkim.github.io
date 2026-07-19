@@ -1,0 +1,26 @@
+{{- $cur := . -}}
+<header class="site-header">
+  <nav class="navbar" aria-label="Primary">
+    <a class="navbar__brand" href="{{ "/" | relURL }}" aria-label="{{ .Site.Params.author }} — home">{{ .Site.Params.author }}</a>
+    <span class="navbar__spacer"></span>
+
+    <button class="navbar__search" type="button" aria-label="Search this site" data-search-open>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
+
+    <button class="navbar__toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" data-nav-toggle>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <div class="navbar__nav" id="primary-menu">
+      {{- range .Site.Menus.main }}
+        {{- $active := or (eq $cur.RelPermalink (.URL | relLangURL)) (and (ne .URL "/") (hasPrefix $cur.RelPermalink (.URL | relLangURL))) -}}
+        <a href="{{ .URL | relLangURL }}"{{ if $active }} class="is-active" aria-current="page"{{ end }}>{{ .Name }}</a>
+      {{- end }}
+    </div>
+  </nav>
+</header>

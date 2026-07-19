@@ -1,0 +1,70 @@
+# Byol Kim — academic website
+# User GitHub Pages site: publishes to https://byolkim.github.io/ (root, no subpath).
+baseURL: "https://byolkim.github.io/"
+title: "Byol Kim"
+languageCode: en-us
+enableRobotsTXT: true
+enableGitInfo: false
+summaryLength: 30
+
+# Home page: HTML + RSS feed. (Search is Pagefind, which crawls the built HTML.)
+outputs:
+  home: [HTML, RSS]
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true          # allow inline HTML + HTML comments in Markdown
+  highlight:
+    noClasses: false
+
+taxonomies:
+  tag: tags
+  # NOTE: the `author` taxonomy is deliberately omitted. The People page is
+  # rendered from a dedicated template so we control the markup, never the
+  # raw Hugo term list (name + publication-count).
+
+permalinks:
+  # Directory name is the permanent slug and appears in the URL (stable, human-readable).
+  page:
+    publication: /publication/:contentbasename/
+    talk: /talk/:contentbasename/
+    software: /software/:contentbasename/
+
+params:
+  author: "Byol Kim"
+  title_line: "Assistant Professor of Statistics"
+  institution: "Sookmyung Women's University"
+  institution_url: "https://www.sookmyung.ac.kr/"
+  email: "byolkim@sookmyung.ac.kr"
+  photo: "images/byol-kim.jpg"
+  cv: "files/byol-kim-cv.pdf"
+  description: "Byol Kim is a statistician working on assumption-lean inference, statistical inference for AI/ML, and dependent-data problems."
+  # GaryKing.org/mysite visibility choices (from the information form).
+  mysite:
+    credit: true       # "Footer credit"  [x]  -> show credit line
+    discovery: true    # "Directory listing" [x] -> emit invisible generator meta + JSON-LD
+
+menu:
+  main:
+    - name: Bio & C.V.
+      url: /bio/
+      weight: 10
+    - name: Writings
+      url: /publication/
+      weight: 20
+    - name: Research Areas
+      url: /#research-areas
+      weight: 30
+    - name: Software
+      url: /software/
+      weight: 40
+    - name: People
+      url: /authors/
+      weight: 50
+    - name: Teaching
+      url: /teaching/
+      weight: 60
+    - name: Contact
+      url: /contact/
+      weight: 70

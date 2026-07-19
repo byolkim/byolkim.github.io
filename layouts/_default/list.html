@@ -1,0 +1,11 @@
+{{ define "main" }}
+<div class="container page-wrap">
+  <h1>{{ .Title }}</h1>
+  {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+  <ul class="pub-list">
+    {{- range .Pages.ByDate.Reverse }}
+    <li class="pub-item"><span class="pub-item__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></span>{{ with .Date }} <span class="muted">· {{ .Format "2006" }}</span>{{ end }}</li>
+    {{- end }}
+  </ul>
+</div>
+{{ end }}

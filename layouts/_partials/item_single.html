@@ -1,0 +1,75 @@
+{{- $owner := site.Params.author -}}
+{{- $co := site.Data.coauthors -}}
+{{- $sec := .Section -}}
+{{- $parentURL := "/publication/" -}}{{- $parentName := "Writings" -}}
+{{- if eq $sec "software" }}{{ $parentURL = "/software/" }}{{ $parentName = "Software" }}{{ end -}}
+<div class="container page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="{{ "/" | relURL }}">{{ i18n "back_home" }}</a> /
+    <a href="{{ $parentURL | relURL }}">{{ $parentName }}</a> /
+    <span aria-current="page">{{ .Title }}</span>
+  </nav>
+
+  {{- with .Resources.GetMatch "featured.*" }}
+  <div class="featured-wrap">
+    <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" loading="lazy"
+      {{ with .Width }}width="{{ . }}"{{ end }} {{ with .Height }}height="{{ . }}"{{ end }}>
+  </div>
+  {{- end }}
+
+  <div class="single-head">
+    <h1>{{ .Title }}</h1>
+    <p class="single-authors">
+      {{- range $i, $a := .Params.authors -}}
+        {{- if $i }}, {{ end -}}
+        {{- if eq $a $owner -}}<strong>{{ $a }}</strong>
+        {{- else -}}
+          {{- $l := index $co $a -}}
+          {{- if $l }}<a href="{{ $l.url }}" rel="noopener" target="_blank">{{ $a }}</a>{{ else }}{{ $a }}{{ end -}}
+        {{- end -}}
+      {{- end -}}
+    </p>
+    {{- with .Params.publication }}<p class="single-venue">{{ . }}</p>{{ end }}
+    {{- if and .Date (ne $sec "software") }}<p class="single-date">{{ .Date.Format "Jan 2006" }}</p>{{ end }}
+    {{- if eq (.Params.status) "in_preparation" }}<p class="single-date"><span class="kind">{{ i18n "in_prep_note" }}</span></p>{{ end }}
+  </div>
+
+  {{- /* Talk venues */ -}}
+  {{- with .Params.venues }}
+  <section class="abstract">
+    <h2>{{ i18n "presented_at" }}</h2>
+    <ul class="course-list">
+      {{- range . }}
+      <li><span>{{ .event }}{{ with .location }} · {{ . }}{{ end }}</span><span class="term">{{ .date }}</span></li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+
+  {{- with .Params.summary }}<p class="lead">{{ . }}</p>{{ end }}
+
+  {{- /* Links */ -}}
+  {{- with .Params.links }}
+  <div class="link-row">
+    {{- range . }}
+      {{- $ext := hasPrefix .url "http" -}}
+      <a class="btn btn--ghost" href="{{ if $ext }}{{ .url }}{{ else }}{{ .url | relURL }}{{ end }}"{{ if $ext }} rel="noopener" target="_blank"{{ end }}>{{ .name }}</a>
+    {{- end }}
+  </div>
+  {{- end }}
+
+  {{- /* Related dataset / software banner */ -}}
+  {{- with .Params.related_paper }}
+    {{- with (site.GetPage (printf "/publication/%s" .)) }}
+    <div class="banner">Companion to <a href="{{ .RelPermalink }}">{{ .Title }}</a>.</div>
+    {{- end }}
+  {{- end }}
+
+  {{- /* Abstract / body */ -}}
+  {{- with .Params.abstract }}
+  <section class="abstract"><h2>{{ i18n "abstract" }}</h2><div class="prose"><p>{{ . }}</p></div></section>
+  {{- end }}
+  {{- with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+
+  {{ partial "related_finder.html" . }}
+</div>

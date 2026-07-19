@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="container page-wrap">
+  <h1>{{ .Title }}</h1>
+  <p class="section-intro">Invited seminars, discussions, and contributed talks. The full record is in the <a href="{{ "/bio/" | relURL }}">C.V.</a></p>
+  <ul class="pub-list">
+    {{- range sort (where site.RegularPages "Section" "talk") "Date" "desc" }}
+    <li class="pub-item">
+      <div class="pub-item__cite">
+        <span class="pub-item__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></span>
+        <span class="pub-item__meta">{{ with .Params.kind_note }}{{ . }} · {{ end }}{{ .Params.publication }}{{ with .Date }} · {{ .Format "2006" }}{{ end }}</span>
+      </div>
+    </li>
+    {{- end }}
+  </ul>
+</div>
+{{ end }}
