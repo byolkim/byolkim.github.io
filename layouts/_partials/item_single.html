@@ -10,6 +10,7 @@
     <span aria-current="page">{{ .Title }}</span>
   </nav>
 
+  <div class="content-card">
   {{- with .Resources.GetMatch "featured.*" }}
   <div class="featured-wrap">
     <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" loading="lazy"
@@ -70,6 +71,7 @@
   <section class="abstract"><h2>{{ i18n "abstract" }}</h2><div class="prose"><p>{{ . }}</p></div></section>
   {{- end }}
   {{- with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+  </div>
 
   {{ partial "related_finder.html" . }}
 </div>

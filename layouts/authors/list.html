@@ -13,6 +13,7 @@
 {{- $rows = sort $rows "key" -}}
 <div class="container page-wrap">
   <h1>{{ .Title }}</h1>
+  <div class="content-card">
   <div class="prose">{{ .Content }}</div>
   <ul class="people-list">
     {{- range $rows }}
@@ -20,6 +21,7 @@
       <li>{{ if $l }}<a href="{{ $l.url }}" rel="noopener" target="_blank">{{ .name }}</a>{{ else }}{{ .name }}{{ end }}</li>
     {{- end }}
   </ul>
+  </div>
   {{/*
     MAINTAINER NOTE (not rendered): This page is auto-generated from co-authorship across
     the site. The external links were resolved by web search and can be WRONG or STALE —

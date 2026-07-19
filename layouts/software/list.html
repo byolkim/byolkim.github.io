@@ -2,6 +2,7 @@
 <div class="container page-wrap">
   <h1>{{ .Title }}</h1>
   <p class="section-intro">Code accompanying the papers — implementations you can read, run, and build on.</p>
+  <div class="content-card">
   <ul class="pub-list">
     {{- range sort (where site.RegularPages "Section" "software") "Date" "desc" }}
     <li class="pub-item">
@@ -15,5 +16,6 @@
     </li>
     {{- end }}
   </ul>
+  </div>
 </div>
 {{ end }}

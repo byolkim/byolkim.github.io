@@ -10,7 +10,16 @@ For whoever (human or AI) maintains this site next. It documents *why* things ar
     template anyway — so Blox would have been downloaded weight that never renders. A pure-Hugo build gives
     the same design with a simpler, more robust CI (Hugo + Pagefind only; no Go modules, no Tailwind build).
   - Styling is a single hand-written stylesheet, `assets/css/custom.css`, using semantic CSS custom
-    properties — **not** utility classes. Change the palette in the `:root` block at the top.
+    properties — **not** utility classes. Change the palette in the `:root` (light) and
+    `:root[data-theme="dark"]` (dark) blocks at the top.
+  - **Visual language is modeled on meethigher's "Starry" Hugo theme** (GPL-3.0): monospace type,
+    `#2563eb` blue accent, white cards with soft shadow + hover-lift, and a deep-navy dark mode with a
+    drifting star-particle canvas. We did not install the theme (it's a blog theme and needs Hugo
+    ≥ 0.154); the look is reproduced in our own CSS/JS so all academic features are preserved.
+  - **Light/dark toggle:** the `#theme-toggle` button sets `data-theme` on `<html>` and persists to
+    `localStorage`; a no-flash init script in `head.html` applies the saved/OS choice before paint. The
+    star canvas (`#starry-canvas`) and its animation live in `baseof.html`; opacity is driven by
+    `--starry-opacity` (0 in light, 1 in dark) and it's disabled under `prefers-reduced-motion`.
 - **Pagefind** for search (built in CI against `public/`). No search server.
 - **GitHub Pages** via GitHub Actions (`.github/workflows/deploy.yml`).
 - **User site** (`byolkim.github.io`): `baseURL` is the domain root, so there is no `/REPO/` subpath.
@@ -48,7 +57,7 @@ For whoever (human or AI) maintains this site next. It documents *why* things ar
 
 ## Conventions worth keeping
 
-- Forced light mode; the theme toggle is hidden in CSS.
+- Light + dark modes with a persisted toggle (Starry aesthetic); no forced mode.
 - Type labels everywhere (`[Paper]`, `[Presentation]`, `[Software]`, `[Working paper]`).
 - No process/sourcing commentary in rendered copy; flags for the owner go in `<!-- HTML comments -->`.
 - Favicon is a generated "BK" monogram on the slate accent (`static/favicon*`), matching `--color-accent`.

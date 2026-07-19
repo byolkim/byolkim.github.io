@@ -87,6 +87,13 @@ with your students' project write-ups or links when they're ready.
 Drop a file named `featured.jpg` (or `.png`) inside that paper's folder, next to `index.md`. It is picked
 up automatically.
 
+## Colors and light/dark theme
+
+The site has a light and a dark mode (the sun/moon button in the top bar); a visitor's choice is
+remembered. The design follows the "Starry" look — monospace type, a blue accent, and a starry
+background in dark mode. To change colors, edit the `:root` (light) and `:root[data-theme="dark"]`
+(dark) blocks at the top of `assets/css/custom.css` — e.g. `--color-primary` is the blue accent.
+
 ## The two GaryKing.org/mysite options
 
 Both are currently **on**. To change them, edit `hugo.yaml` under `params.mysite:`

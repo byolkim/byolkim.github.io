@@ -3,7 +3,7 @@
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href="{{ "/" | relURL }}">{{ i18n "back_home" }}</a> / <span aria-current="page">{{ .Title }}</span>
   </nav>
-  <article class="prose">
+  <article class="prose content-card">
     <h1>{{ .Title }}</h1>
     {{ .Content }}
     {{- if .Site.Params.cv }}
