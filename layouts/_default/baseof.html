@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ or site.LanguageCode "en" }}" class="light">
+<html lang="{{ or site.LanguageCode "en" }}" data-theme="dark">
 <head>
   {{ partial "head.html" . }}
 </head>
@@ -21,7 +21,7 @@
 
   <script>
   (function () {
-    // Mobile nav
+    // Mobile nav dropdown
     var toggle = document.querySelector('[data-nav-toggle]');
     var menu = document.getElementById('primary-menu');
     if (toggle && menu) {
@@ -29,15 +29,17 @@
         var open = menu.classList.toggle('is-open');
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
+      // Close the menu after following a link, and on Esc
+      menu.addEventListener('click', function (e) {
+        if (e.target.closest('a')) { menu.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menu.classList.contains('is-open')) {
+          menu.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
     }
-    // Theme toggle
     var root = document.documentElement;
-    var tbtn = document.getElementById('theme-toggle');
-    if (tbtn) tbtn.addEventListener('click', function () {
-      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      try { localStorage.setItem('theme', next); } catch (e) {}
-    });
     // Back-to-top
     var top = document.getElementById('to-top');
     if (top) {

@@ -1,0 +1,31 @@
+{{ define "main" }}
+<div class="container page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="{{ "/" | relURL }}">{{ i18n "back_home" }}</a> /
+    <a href="{{ "/contact/" | relURL }}">Contact</a> /
+    <span aria-current="page">{{ .Title }}</span>
+  </nav>
+  <article class="content-card prose" data-lang="en">
+    <div class="page-head">
+      <h1><span class="lang lang-en">{{ .Title }}</span><span class="lang lang-ko">{{ .Params.title_ko }}</span></h1>
+      <button type="button" class="btn btn--ghost lang-toggle" aria-label="Toggle language">
+        <span class="lang lang-en">한국어</span><span class="lang lang-ko">English</span>
+      </button>
+    </div>
+    {{- with .Params.form_url }}
+    <p><a class="btn" href="{{ . }}" target="_blank" rel="noopener"><span class="lang lang-en">Fill out the form</span><span class="lang lang-ko">양식 작성하기</span></a></p>
+    {{- end }}
+    {{ .Content }}
+  </article>
+</div>
+<script>
+(function () {
+  document.querySelectorAll(".lang-toggle").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var root = btn.closest("[data-lang]");
+      root.setAttribute("data-lang", root.getAttribute("data-lang") === "en" ? "ko" : "en");
+    });
+  });
+})();
+</script>
+{{ end }}

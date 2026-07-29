@@ -1,7 +1,7 @@
 {{- $owner := site.Params.author -}}
 {{- $co := site.Data.coauthors -}}
 {{- $sec := .Section -}}
-{{- $parentURL := "/publication/" -}}{{- $parentName := "Writings" -}}
+{{- $parentURL := "/publication/" -}}{{- $parentName := "Publications & Talks" -}}
 {{- if eq $sec "software" }}{{ $parentURL = "/software/" }}{{ $parentName = "Software" }}{{ end -}}
 <div class="container page-wrap">
   <nav class="breadcrumbs" aria-label="Breadcrumb">

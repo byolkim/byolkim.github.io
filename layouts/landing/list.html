@@ -1,59 +1,73 @@
 {{ define "main" }}
-{{- $areas := site.Data.research_areas.areas -}}
-{{- $itemsAll := where site.RegularPages "Section" "in" (slice "publication" "talk" "software") -}}
 <div class="container">
-  <section class="hero" aria-label="Introduction">
-    <img class="hero__photo" src="{{ site.Params.photo | relURL }}" width="200" height="200"
-         alt="Portrait of {{ site.Params.author }}, {{ site.Params.institution }}">
-    <div class="hero__body">
+  <section class="hero" data-lang="en" aria-label="Introduction">
+    <div class="hero__side">
+      <img class="hero__photo" src="{{ site.Params.photo | relURL }}" width="200" height="200"
+           alt="Portrait of {{ site.Params.author }}, {{ site.Params.institution }}">
       <h1 class="hero__name">{{ site.Params.author }}</h1>
       <p class="hero__title">{{ site.Params.title_line }}</p>
       <p class="hero__inst"><a href="{{ site.Params.institution_url }}" rel="noopener" target="_blank">{{ site.Params.institution }}</a></p>
-      <p class="hero__intro">Byol Kim is a statistician who thinks a lot about doing statistical inference without a whole lot of assumptions. She loves it when she can pinpoint the one structural fact a problem cannot do without&mdash;be it sparsity in a difference or invariance under permutations&mdash;and build inference on that alone. She would like to hear from researchers who work with dependent data (e.g., time series, spatial statistics, network-structured data) or with distribution shift, and who are exploring deep learning techniques but still want honest error bars. She would also love to hear from scientists in psychometrics or learning psychology who could use a statistician&rsquo;s eyes.</p>
-      <div class="hero__actions">
-        <a class="btn" href="{{ "/bio/" | relURL }}">Bio &amp; C.V.</a>
-        <a class="btn" href="{{ "/publication/" | relURL }}">Writings</a>
-        <a class="btn btn--ghost" href="mailto:{{ site.Params.email }}">Email</a>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" class="lang-btn" data-set-lang="en">EN</button>
+        <button type="button" class="lang-btn" data-set-lang="ko">한국어</button>
+        <button type="button" class="lang-btn" data-set-lang="ja">日本語</button>
+      </div>
+    </div>
+    <div class="hero__body">
+      <div class="hero__intro">
+        {{- /* ---------- English (default) ---------- */ -}}
+        <div class="lang lang-en" lang="en">
+          <p>I am a statistician who thinks a lot about doing statistical inference without a whole lot of assumptions. Sometimes, this is about locating the right quantity to pin the assumptions on (<a href="{{ "/publication/two-sample-inference-markov-networks/" | relURL }}">Kim et al., 2021</a>; <a href="{{ "/publication/spectral-differential-network-analysis-time-series/" | relURL }}">Hellstern et al., 2025</a>; <a href="{{ "/publication/assumption-lean-spectral-differential-networks/" | relURL }}">Hellstern et al., 2026</a>). At other times, this is about taking advantage of a structural symmetry that may not be visible to the naked eye (<a href="{{ "/publication/predictive-inference-jackknife-after-bootstrap/" | relURL }}">Kim et al., 2020</a>). At the same time, this can also lead to questions about whether we have let go of too many assumptions (<a href="{{ "/publication/black-box-tests-algorithmic-stability/" | relURL }}">Kim &amp; Barber, 2023</a>).</p>
+          <p>I am actively looking for collaborators. In particular, I would be very interested to hear from researchers in adjacent fields who regularly see data exhibiting nontrivial dependence among observations (e.g., time series, spatial, or network-structured data) or with distribution shift, who have had success with initial forays into deep learning techniques, but would like some error bars to go with it. It is quite possible my expertise can increase the quality of your research.</p>
+          <p>I would also be excited to talk to researchers in educational psychology or related fields who design and run randomized trials on teaching methods. I love coming up with and testing out new teaching techniques and have spent the past few years doing just that in my classrooms. However, I would love to know whether my ideas actually work, and as a statistician and someone who teaches an experimental design course at that, I am all too aware that the data I am able to gather are well short of the gold standard of a proper RCT. Therefore, I would love to work with someone who can help turn these ideas into testable hypotheses, and then help design and analyze the resulting trials.</p>
+          <p>Some of the key words that describe my past and current research projects are:</p>
+          <ul class="hero__keywords">
+            <li>Foundational concepts: algorithmic stability, asymptotic theory, Gaussian approximation (e.g., Berry-Esseen, Chernozhukov-Chetverikov-Kato), dependence measures (e.g., strong mixing, functional dependence)</li>
+            <li>Methods: bootstrap, conformal prediction, graphical models, post-regularization inference, resampling &amp; sample splitting, spectral density</li>
+            <li>Application domains: MRI data, neuroimaging data, time-series data</li>
+          </ul>
+          <p>TMI: Just because your research interest does not appear on the list does not mean that I will not be interested in your problem; the only reason it is not there may be that I have had no opportunity to encounter it. After all, isn&rsquo;t the best part of collaboration being introduced to problems that you would otherwise not have the chance to think about?</p>
+        </div>
+        {{- /* ---------- 한국어 ---------- */ -}}
+        <div class="lang lang-ko" lang="ko">
+          <p>안녕하세요.</p>
+          <p>저는 통계적 추론을 수행함에 있어 가능한 한 가정을 가볍게 하는 데에 관심이 있는 통계학자입니다. 이는 때로는 가정을 두어야 할 대상을 다시 살펴보는 일이기도 하고 (<a href="{{ "/publication/two-sample-inference-markov-networks/" | relURL }}">Kim et al., 2021</a>; <a href="{{ "/publication/spectral-differential-network-analysis-time-series/" | relURL }}">Hellstern et al., 2025</a>; <a href="{{ "/publication/assumption-lean-spectral-differential-networks/" | relURL }}">Hellstern et al., 2026</a>), 때로는 눈에 잘 띄지 않는 구조적 대칭성을 잘 활용하는 일이기도 합니다 (<a href="{{ "/publication/predictive-inference-jackknife-after-bootstrap/" | relURL }}">Kim et al., 2020</a>). 동시에 이러한 시도는 우리가 가정을 너무 많이 내려놓은 것은 아닌지에 대한 물음으로 이어지기도 합니다 (<a href="{{ "/publication/black-box-tests-algorithmic-stability/" | relURL }}">Kim &amp; Barber, 2023</a>).</p>
+          <p>저는 현재 적극적으로 공동연구자를 찾고 있습니다. 시계열 데이터, 공간 데이터, 네트워크 구조를 가진 데이터 등 관측치 간에 자명하지 않은 의존관계가 나타나는 데이터나 분포 변화를 동반하는 데이터를 평소에 다루고 계신 인접 분야의 연구자분들, 특히 딥러닝 기법을 이용한 분석에서 일정한 성과를 거두셨으면서도 그 결과에 통계적 뒷받침을 더하고 싶어 하시는 분들의 연락을 기다리고 있습니다. 저의 전문 지식이 여러분의 연구의 질을 높이는 데에 도움이 될 가능성은 충분하다고 생각합니다.</p>
+          <p>또한 교육심리학 및 그 관련 분야에서 교수법에 관한 무작위 대조 시험을 설계하고 실시하고 계신 연구자분들과도 이야기를 나누고 싶습니다. 저는 새로운 교육 기법을 고안하고 이를 직접 시도해 보는 것을 무척 좋아하며, 지난 몇 년간 실제로 제 수업에서 소소하게나마 이를 실천해 왔습니다. 그러나 그것들이 정말로 효과가 있는지에 대해서는 저 스스로도 확신이 서지 않습니다. 통계학자이자 실험계획법 강의를 담당하고 있는 사람으로서, 제가 모을 수 있는 데이터가 진정한 RCT(무작위 대조 시험)라는 최적 기준에는 크게 미치지 못한다는 사실을 잘 알고 있습니다. 따라서 이러한 아이디어를 검증 가능한 가설로 다듬고, 나아가 실험의 설계 및 결과 분석에 함께해 주실 수 있는 분과 꼭 연구를 진행하고 싶습니다.</p>
+          <p>지금까지, 그리고 현재의 연구 프로젝트를 특징짓는 키워드를 몇 가지 들면 다음과 같습니다.</p>
+          <ul class="hero__keywords">
+            <li>기초 개념: algorithmic stability, asymptotic theory, Gaussian approximation (e.g., Berry-Esseen, Chernozhukov-Chetverikov-Kato), dependence measures (e.g., strong mixing, functional dependence)</li>
+            <li>방법론: bootstrap, conformal prediction, graphical models, post-regularization inference, resampling &amp; sample splitting, spectral density</li>
+            <li>응용 분야: MRI data, neuroimaging data, time-series data</li>
+          </ul>
+          <p>다만, 여기에 열거된 키워드에 여러분의 연구 주제가 포함되어 있지 않더라도 부디 개의치 마시기 바랍니다. 단지 그동안 인연이 닿지 않았을 뿐일지도 모릅니다. 오히려 뜻밖의 분야의 문제와 만나게 되는 것이야말로 공동연구의 묘미라고 생각합니다.</p>
+        </div>
+        {{- /* ---------- 日本語 ---------- */ -}}
+        <div class="lang lang-ja" lang="ja">
+          <p>初めまして。</p>
+          <p>私は統計的推論を行うことにおきまして、できるだけ仮定を軽くすることに興味のある統計学者です。それは、時には仮定を置くべき対象を見直すことであったり(<a href="{{ "/publication/two-sample-inference-markov-networks/" | relURL }}">Kim et al., 2021</a>; <a href="{{ "/publication/spectral-differential-network-analysis-time-series/" | relURL }}">Hellstern et al., 2025</a>; <a href="{{ "/publication/assumption-lean-spectral-differential-networks/" | relURL }}">Hellstern et al., 2026</a>)、時には隠れている構造的対称性をうまく利用することであったりします(<a href="{{ "/publication/predictive-inference-jackknife-after-bootstrap/" | relURL }}">Kim et al., 2020</a>)。同時に、こうした取り組みは、仮定を手放しすぎていないかという問いにもつながります(<a href="{{ "/publication/black-box-tests-algorithmic-stability/" | relURL }}">Kim &amp; Barber, 2023</a>)。</p>
+          <p>私は現在、積極的に共同研究者を探しています。時系列データ、空間データ、ネットワーク構造を持つデータなど、観測間に非自明な依存関係が見られるデータや分布シフトを伴うデータを日常的に扱っておられる近接分野の研究者の方、とりわけ深層学習の手法を用いた解析で一定の成果を挙げつつも、その結果に統計的な裏付けを加えたいとお考えの方からのご連絡を心待ちにしております。私の専門知識が、皆様の研究の質を高める一助となる可能性は十分にあると考えております。</p>
+          <p>また、教育心理学およびその関連分野で、教授法に関するランダム化比較試験を設計・実施されている研究者の方々ともお話しができたらと考えています。私は新しい教育技法を考案し、それを実践することが大好きで、ここ数年、実際に自分の教室で小規模ながら試みてきました。しかし、それらが本当に効果を上げているのかについては、自分でも確信が持てずにいます。統計学者であり、実験計画法の授業を担当している者として、自分が集められるデータが、真のRCT(ランダム化比較試験)というゴールドスタンダードにはとても及ばないことを承知しています。そのため、これらのアイデアを検証可能な仮説へと落とし込み、その上で実験の設計や結果の解析にご協力いただける方と、ぜひ一緒に研究を進めたいと考えています。</p>
+          <p>これまでの、そして現在の研究プロジェクトを特徴づけるキーワードをいくつか挙げます。</p>
+          <ul class="hero__keywords">
+            <li>基礎概念：algorithmic stability, asymptotic theory, Gaussian approximation (e.g., Berry-Esseen, Chernozhukov-Chetverikov-Kato), dependence measures (e.g., strong mixing, functional dependence)</li>
+            <li>手法：bootstrap, conformal prediction, graphical models, post-regularization inference, resampling &amp; sample splitting, spectral density</li>
+            <li>応用分野：MRI data, neuroimaging data, time-series data</li>
+          </ul>
+          <p>なお、ここに挙げたキーワードに皆様の研究テーマが含まれていなくても、どうか気になさらないでください。単に、これまでご縁がなかっただけかもしれません。むしろ、思いがけない分野の問題に出会えることこそ、共同研究の醍醐味だと考えております。</p>
+        </div>
       </div>
     </div>
   </section>
-
-  <section class="ra-section" aria-labelledby="research-areas">
-    <h2 id="research-areas">Research areas</h2>
-    <p class="section-intro">A few threads that run through the work. Open one to see representative papers, talks, and code.</p>
-
-    {{- range $areas }}
-      {{- $area := . -}}
-      {{- $matched := slice -}}
-      {{- range $itemsAll -}}
-        {{- $hit := false -}}
-        {{- range (.Params.tags | default slice) }}{{ if in $area.tags . }}{{ $hit = true }}{{ end }}{{ end -}}
-        {{- if $hit }}{{ $matched = $matched | append . }}{{ end -}}
-      {{- end -}}
-      {{- $matched = first 5 (sort $matched "Date" "desc") -}}
-      <details class="accordion"{{ if eq (index $areas 0).slug $area.slug }} open{{ end }}>
-        <summary class="accordion__header">
-          <svg class="accordion__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
-          <span>{{ $area.name }}</span>
-          <span class="accordion__meta">{{ len $matched }} item{{ if ne (len $matched) 1 }}s{{ end }}</span>
-        </summary>
-        <div class="accordion__body">
-          <p class="accordion__desc">{{ $area.description }}</p>
-          <ul class="pub-list">
-            {{- range $matched }}
-            {{- $pt := .Params.publication_types | default slice -}}
-            {{- $k := i18n "kind_paper" -}}
-            {{- if or (in $pt "software") (eq .Section "software") }}{{ $k = i18n "kind_software" }}{{ else if or (in $pt "presentation") (eq .Section "talk") }}{{ $k = i18n "kind_presentation" }}{{ else if in $pt "report" }}{{ $k = i18n "kind_report" }}{{ end -}}
-            <li class="pub-item">
-              <span class="pub-item__title"><span class="kind{{ if or (in $pt "software") (eq .Section "software") }} kind--software{{ end }}">{{ $k }}</span> <a href="{{ .RelPermalink }}">{{ .Title }}</a></span>
-              <span class="pub-item__meta">{{ with .Date }}{{ .Format "2006" }}{{ end }}</span>
-            </li>
-            {{- end }}
-          </ul>
-          <a class="link-more" href="{{ (printf "/publication/?area=%s" $area.slug) | relURL }}">View all in {{ $area.name }} &rarr;</a>
-        </div>
-      </details>
-    {{- end }}
-  </section>
 </div>
+<script>
+(function () {
+  document.querySelectorAll(".lang-switch .lang-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var root = btn.closest("[data-lang]");
+      root.setAttribute("data-lang", btn.getAttribute("data-set-lang"));
+    });
+  });
+})();
+</script>
 {{ end }}

@@ -1,0 +1,80 @@
+# Teaching galleries. To add a project, copy a block and edit it —
+# put the PDFs in static/files/teaching/… and thumbnails in static/images/teaching/.
+# Note: student evaluations are deliberately NOT published.
+
+doe:
+  heading: "Design and Analysis of Experiments"
+  term: "Spring 2026"
+  description: "The most scientific investigation of the most trivial question."
+  vote_note: "The winner and runner-up were chosen by a class vote held after the final presentations. As such, the results reflect students' impressions of their classmates' presentations, rather than the instructor's evaluation."
+  instructions:
+    name: "Instructions for the Final Project"
+    url: "files/teaching/doe/instructions-final-project.pdf"
+  projects:
+    - title: "How to Keep Your Roses Alive"
+      students: "Lee Herim · Park Sun Young"
+      award: "Winner"
+      award_class: "winner"
+      thumb: "images/teaching/doe-rose.jpg"
+      blurb: "Cut flowers die fast. This team found that a spoonful of sugar with a splash of vinegar can keep your roses fresh for longer — but sugar alone can kill them faster."
+      links:
+        - { name: "Final report", url: "files/teaching/doe/team-5-final-report.pdf" }
+        - { name: "Final presentation slides", url: "files/teaching/doe/team-5-final-presentation.pdf" }
+        - { name: "Progress report", url: "files/teaching/doe/team-5-progress-report.pdf" }
+        - { name: "Proposal slides", url: "files/teaching/doe/team-5-proposal-slides.pdf" }
+
+    - title: "How to Remove Buldak Sauce Stains"
+      students: "Choi Hyunkyung · Lee Bom"
+      award: "Runner-up"
+      award_class: "runner-up"
+      thumb: "images/teaching/doe-buldak-stain.jpg"
+      blurb: "Buldak sauce is delicious, but notorious for ruining your favorite t-shirts. This team asked how best to launder a buldak-stained shirt to restore it to its pristine condition."
+      links:
+        - { name: "Final report", url: "files/teaching/doe/team-4-final-report.pdf" }
+        - { name: "Final presentation slides", url: "files/teaching/doe/team-4-final-presentation.pdf" }
+        - { name: "Progress report", url: "files/teaching/doe/team-4-progress-report.pdf" }
+        - { name: "Proposal slides", url: "files/teaching/doe/team-4-proposal-slides.pdf" }
+
+    - title: "No More Dry Chicken"
+      students: "Cho Yubeen · Lee Hyun Seung"
+      thumb: "images/teaching/doe-chicken.jpg"
+      blurb: "For the budget- and health-conscious, chicken breasts are essential for survival — but many aren't fans of their dry texture. This team asked whether thawing and cooking methods affect juiciness, and found that the best method isn't the one recommended by the manufacturer."
+      links:
+        - { name: "Final report", url: "files/teaching/doe/team-7-final-report.pdf" }
+        - { name: "Final presentation slides", url: "files/teaching/doe/team-7-final-presentation.pdf" }
+        - { name: "Progress report", url: "files/teaching/doe/team-7-progress-report.pdf" }
+        - { name: "Proposal slides", url: "files/teaching/doe/team-7-proposal-slides.pdf" }
+
+cp:
+  heading: "Conformal Prediction"
+  term: "Spring 2026"
+  note: "Replicate, then extend."
+  # Submissions are withheld pending student consent to publish.
+  projects:
+    - title: "Survival Prediction Beyond the Clinic"
+      students: "KSJ"
+      blurb: 'Conformalized survival analysis was built for medical data, where censoring is the norm and calibrated uncertainty is essential. This project reproduces the framework of <a href="https://doi.org/10.1093/jrsssb/qkac004" target="_blank" rel="noopener">Candès et al. (2023)</a>, then asks whether it travels: can the same guarantees hold when the "survival time" is a financial event rather than a clinical one?'
+
+    - title: "Understanding Prediction Set Efficiency in Conformal Ordinal Classification"
+      students: "LSY"
+      blurb: 'Medical diagnosis is rarely a yes-or-no question; severity comes in ordered grades, and a prediction set that respects that ordering is far more useful to a clinician. This project compares two conformal ordinal classifiers by <a href="https://doi.org/10.1007/978-3-031-16452-1_52" target="_blank" rel="noopener">Lu et al. (2022)</a> and <a href="https://doi.org/10.1609/aaai.v40i34.40098" target="_blank" rel="noopener">Zhang et al. (2026)</a> on a diabetic retinopathy dataset to see which ones deliver.'
+
+    - title: "Taming Instability with Weight Clipping"
+      students: "YYB"
+      blurb: '<a href="https://openreview.net/pdf?id=JQtuCumAFD" target="_blank" rel="noopener">Davidov et al. (2025)</a> extend conformalized survival analysis to general right-censored data, but the method becomes unstable under heavy censoring. This project explores weight clipping as a remedy.'
+
+cp_examples:
+  heading: "Conformal Prediction by Examples"
+  term: "Summer 2025"
+  note: "Slides for the Korean Statistical Society's summer school. Slides are in Korean."
+  sessions:
+    - { num: "0", title: "Getting started", slides: "files/teaching/cp-examples/getting-started.pdf" }
+    - { num: "1", title: "ImageNet + LABEL", slides: "files/teaching/cp-examples/imagenet-label.pdf" }
+    - { num: "2", title: "ImageNet + APS", slides: "files/teaching/cp-examples/imagenet-aps.pdf" }
+    - { num: "3", title: "MEPS + CQR", slides: "files/teaching/cp-examples/meps-cqr.pdf" }
+    - { num: "5", title: "MEPS + weighted conformal", slides: "files/teaching/cp-examples/meps-weighted-conformal.pdf" }
+    - { num: "5S", title: "Weighted conformal — supplement", slides: "files/teaching/cp-examples/weighted-conformal-supp.pdf" }
+    - { num: "6", title: "MS COCO + CRC", slides: "files/teaching/cp-examples/mscoco-crc.pdf" }
+    - { num: "6S", title: "Split conformal as CRC — supplement", slides: "files/teaching/cp-examples/split-conformal-as-crc-supp.pdf" }
+    - { num: "7", title: "MEPS + jackknife+", slides: "files/teaching/cp-examples/meps-jackknife-plus.pdf" }
+    - { num: "8", title: "Wrapping up", slides: "files/teaching/cp-examples/wrapping-up.pdf" }

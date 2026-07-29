@@ -1,27 +1,33 @@
 {
   "areas": [
     {
-      "slug": "assumption-lean-inference",
-      "name": "Assumption-lean inference",
-      "description": "Inference that rests on the single structural fact a problem cannot do without, rather than a full parametric model — and that stays honest when those extra assumptions would fail.",
-      "tags": ["assumption-lean inference", "algorithmic stability"]
+      "slug": "differential-networks",
+      "name": "differential networks",
+      "description": "Estimating and testing how the conditional-dependence structure of a system changes between two conditions, in high dimensions.",
+      "tags": ["differential networks", "graphical models"]
     },
     {
-      "slug": "inference-for-ai-ml",
-      "name": "Inference for AI and machine learning",
-      "description": "Error bars for the predictions and algorithms people actually deploy: conformal and predictive inference, and black-box tests for whether a learning procedure is stable.",
-      "tags": ["statistical inference for AI/ML", "conformal prediction", "predictive inference", "algorithmic stability"]
+      "slug": "predictive-inference",
+      "name": "predictive inference for AI/ML models",
+      "description": "Distribution-free predictive confidence sets — conformal prediction and the jackknife+-after-bootstrap — for arbitrary learning algorithms.",
+      "tags": ["predictive inference", "conformal prediction"]
     },
     {
-      "slug": "dependent-high-dimensional-data",
-      "name": "Dependent and high-dimensional data",
-      "description": "Inference for time series and graphical models when the number of parameters is large — including how two networks differ.",
-      "tags": ["time series", "high-dimensional data", "differential networks", "graphical models"]
+      "slug": "black-box-limits",
+      "name": "fundamental limits of black-box inference",
+      "description": "What can, and cannot, be certified about a black-box algorithm from data alone — for example, tests for algorithmic stability.",
+      "tags": ["algorithmic stability"]
     },
     {
-      "slug": "statistical-methods-for-imaging",
-      "name": "Statistical methods for imaging",
-      "description": "Reconstruction and inference for medical imaging, including accelerated breast DCE-MRI.",
+      "slug": "multivariate-time-series",
+      "name": "multivariate time series",
+      "description": "Inference for high-dimensional, dependent data, including spectral differential-network analysis of time series.",
+      "tags": ["time series"]
+    },
+    {
+      "slug": "interdisciplinary",
+      "name": "interdisciplinary collaborations",
+      "description": "Methods developed with domain scientists, including accelerated breast-MRI reconstruction.",
       "tags": ["MRI reconstruction", "imaging"]
     }
   ]

@@ -1,15 +1,8 @@
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <nav aria-label="Footer">
-      {{- range .Site.Menus.main }}
-      <a href="{{ .URL | relLangURL }}">{{ .Name }}</a>
-      {{- end }}
-    </nav>
     <div class="site-footer__meta">
       <p>&copy; {{ now.Year }} {{ .Site.Params.author }} · {{ .Site.Params.institution }}</p>
-      {{- if .Site.Params.mysite.credit }}
-      <p class="site-footer__credit">Created using <a href="https://garyking.org/mysite">GaryKing.org/mysite</a></p>
-      {{- end }}
+      <p class="site-footer__credit">{{ if .Site.Params.mysite.credit }}Created using <a href="https://garyking.org/mysite">GaryKing.org/mysite</a>. {{ end }}Design adapted from the <a href="https://github.com/meethigher/hugo-theme-starry" target="_blank" rel="noopener">Starry</a> theme by meethigher.</p>
     </div>
   </div>
 </footer>

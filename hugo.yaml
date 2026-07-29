@@ -20,9 +20,6 @@ markup:
 
 taxonomies:
   tag: tags
-  # NOTE: the `author` taxonomy is deliberately omitted. The People page is
-  # rendered from a dedicated template so we control the markup, never the
-  # raw Hugo term list (name + publication-count).
 
 permalinks:
   # Directory name is the permanent slug and appears in the URL (stable, human-readable).
@@ -47,24 +44,22 @@ params:
 
 menu:
   main:
-    - name: Bio & C.V.
+    - name: Bio
       url: /bio/
       weight: 10
-    - name: Writings
-      url: /publication/
+    - name: Research
+      url: /research/
       weight: 20
-    - name: Research Areas
-      url: /#research-areas
-      weight: 30
-    - name: Software
-      url: /software/
-      weight: 40
-    - name: People
-      url: /authors/
-      weight: 50
     - name: Teaching
       url: /teaching/
-      weight: 60
+      weight: 30
+    - name: Publications & Talks
+      url: /publication/
+      weight: 40
+    - name: Software
+      url: /software/
+      weight: 50
     - name: Contact
       url: /contact/
-      weight: 70
+      weight: 60
+  # Note: the People page still builds at /authors/ but is no longer linked from the nav.

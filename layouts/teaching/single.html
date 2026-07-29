@@ -1,0 +1,92 @@
+{{ define "main" }}
+{{- $t := site.Data.teaching -}}
+<div class="container page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="{{ "/" | relURL }}">{{ i18n "back_home" }}</a> / <span aria-current="page">{{ .Title }}</span>
+  </nav>
+  <h1>{{ .Title }}</h1>
+
+  {{- /* ---------- Design & Analysis of Experiments ---------- */ -}}
+  {{- with $t.doe }}
+  <section class="gallery" aria-labelledby="doe-h">
+    <h2 id="doe-h">{{ .heading }} <span class="gallery__term">{{ .term }}</span></h2>
+    {{- with .description }}<p class="section-intro">{{ . }}</p>{{ end }}
+    <div class="proj-grid">
+      {{- range .projects }}
+      {{- $p := . }}
+      <article class="proj-card card--hover">
+        {{- with $p.thumb }}
+        <img class="proj-card__thumb" src="{{ . | relURL }}" alt="{{ $p.title }}" loading="lazy">
+        {{- end }}
+        <div class="proj-card__body">
+          {{- if $p.award }}<span class="proj-award proj-award--{{ $p.award_class }}">{{ $p.award }}</span>
+          {{- else }}<span class="proj-award proj-award--none" aria-hidden="true">Winner</span>{{ end }}
+          <h3 class="proj-card__title">{{ .title }}</h3>
+          <p class="proj-card__students">{{ .students }}</p>
+          <p class="proj-card__blurb">{{ .blurb | safeHTML }}</p>
+          {{- with .links }}
+          <div class="proj-links">
+            {{- range . }}<a href="{{ .url | relURL }}" target="_blank" rel="noopener">{{ .name }}</a>{{ end }}
+          </div>
+          {{- end }}
+        </div>
+      </article>
+      {{- end }}
+    </div>
+    {{- with .vote_note }}<p class="gallery__note">{{ . }}</p>{{ end }}
+  </section>
+  {{- end }}
+
+  {{- /* ---------- Link to the standalone pedagogical-design notes ---------- */ -}}
+  <p class="notes-link"><a href="{{ "/teaching-notes/" | relURL }}">Notes on the pedagogical design &rarr;</a></p>
+
+  {{- /* ---------- Conformal Prediction (no thumbnails) ---------- */ -}}
+  {{- with $t.cp }}
+  <section class="gallery" aria-labelledby="cp-h">
+    <h2 id="cp-h">{{ .heading }} <span class="gallery__term">{{ .term }}</span></h2>
+    {{- with .note }}<p class="section-intro">{{ . }}</p>{{ end }}
+    <div class="proj-grid">
+      {{- range .projects }}
+      <article class="proj-card proj-card--text card--hover">
+        <div class="proj-card__body">
+          <h3 class="proj-card__title">{{ .title }}</h3>
+          <p class="proj-card__students">{{ .students }}</p>
+          <p class="proj-card__blurb">{{ .blurb | safeHTML }}</p>
+          {{- with .links }}
+          <div class="proj-links">
+            {{- range . }}<a href="{{ .url | relURL }}" target="_blank" rel="noopener">{{ .name }}</a>{{ end }}
+          </div>
+          {{- end }}
+        </div>
+      </article>
+      {{- end }}
+    </div>
+  </section>
+  {{- end }}
+
+  {{- /* ---------- Conformal Prediction by Examples — slides ---------- */ -}}
+  {{- with $t.cp_examples }}
+  <section class="gallery" aria-labelledby="cpx-h">
+    <h2 id="cpx-h">{{ .heading }}{{ with .term }} <span class="gallery__term">{{ . }}</span>{{ end }}</h2>
+    {{- with .note }}<p class="section-intro section-intro--full">{{ . }}</p>{{ end }}
+    <div class="content-card">
+      <ul class="slides-list">
+        {{- range .sessions }}
+        <li>
+          <span class="slides-list__n">{{ .num }}</span>
+          <span class="slides-list__title">{{ .title }}</span>
+          <span class="slides-list__links">
+            <a href="{{ .slides | relURL }}" target="_blank" rel="noopener">Slides</a>
+            {{- with .annotated }}<a href="{{ . | relURL }}" target="_blank" rel="noopener">Annotated</a>{{ end }}
+          </span>
+        </li>
+        {{- end }}
+      </ul>
+    </div>
+  </section>
+  {{- end }}
+
+  {{- /* ---------- Link to the standalone AI-in-teaching resource page ---------- */ -}}
+  <h2 class="section-link"><a href="{{ "/teaching-ai/" | relURL }}">Teaching Mathematics in the Age of AI &rarr;</a></h2>
+</div>
+{{ end }}

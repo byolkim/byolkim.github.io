@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="container page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="{{ "/" | relURL }}">{{ i18n "back_home" }}</a> /
+    <a href="{{ "/contact/" | relURL }}">Contact</a> /
+    <span aria-current="page">{{ .Title }}</span>
+  </nav>
+  <article class="content-card prose">
+    <h1>{{ .Title }}</h1>
+    {{- with .Params.form_url }}
+    <p><a class="btn" href="{{ . }}" target="_blank" rel="noopener">Fill out the form</a></p>
+    {{- end }}
+    {{ .Content }}
+  </article>
+</div>
+{{ end }}

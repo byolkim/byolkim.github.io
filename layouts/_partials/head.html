@@ -1,10 +1,6 @@
 {{- $site := .Site -}}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-{{- /* No-flash theme init: honor saved choice, else OS preference */ -}}
-<script>
-(function(){try{var t=localStorage.getItem('theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
-</script>
 {{- $desc := or .Description .Params.summary $site.Params.description -}}
 <title>{{ if .IsHome }}{{ $site.Title }} — {{ $site.Params.title_line }}{{ else }}{{ .Title }} · {{ $site.Title }}{{ end }}</title>
 <meta name="description" content="{{ $desc }}">

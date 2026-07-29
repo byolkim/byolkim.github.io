@@ -1,0 +1,30 @@
+{{ define "main" }}
+{{- $d := site.Data.reading_ai -}}
+<div class="container page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="{{ "/" | relURL }}">{{ i18n "back_home" }}</a> /
+    <a href="{{ "/teaching/" | relURL }}">Teaching</a> /
+    <span aria-current="page">{{ .Title }}</span>
+  </nav>
+  <h1>{{ .Title }}</h1>
+  {{- with $d.intro }}<p class="section-intro section-intro--full">{{ . }}</p>{{ end }}
+
+  {{- range $d.sections }}
+  {{- if .entries }}
+  <section class="gallery" aria-labelledby="{{ .heading | urlize }}-h">
+    <h2 id="{{ .heading | urlize }}-h">{{ .heading }}</h2>
+    <div class="content-card">
+      <ul class="reading-list">
+        {{- range .entries }}
+        <li>
+          <a class="reading-list__title" href="{{ .url }}" target="_blank" rel="noopener">{{ .title }}</a>
+          {{- with .author }}<span class="reading-list__by">by {{ . }}</span>{{ end }}
+        </li>
+        {{- end }}
+      </ul>
+    </div>
+  </section>
+  {{- end }}
+  {{- end }}
+</div>
+{{ end }}

@@ -1,0 +1,4 @@
+{{- /* Wrap a block of markdown in a language layer toggled by the page's [data-lang]. Usage: {{< lang en >}}…{{< /lang >}} */ -}}
+<div class="lang lang-{{ .Get 0 }}">
+{{ .Inner | markdownify }}
+</div>

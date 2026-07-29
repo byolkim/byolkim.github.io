@@ -32,7 +32,6 @@
 
 <div class="container page-wrap">
   <h1>{{ .Title }}</h1>
-  <p class="section-intro">Published articles, conference papers, work in preparation, and invited and contributed talks.</p>
 
   <div class="writings">
     <nav class="pub-tabs" role="tablist" aria-label="Filter by type">
@@ -87,8 +86,9 @@
           {{- if eq .Params.status "in_preparation" }}{{ $tab = "in-preparation" }}
           {{- else if in $pt "presentation" }}{{ $tab = "presentations" }}
           {{- else if in $pt "report" }}{{ $tab = "in-preparation" }}{{ end -}}
+          {{- $itemTags := .Params.tags | default slice -}}
           {{- $itemAreas := slice -}}
-          {{- range $areas }}{{ $a := . }}{{ range ($.Params.tags | default slice) }}{{ if in $a.tags . }}{{ if not (in $itemAreas $a.slug) }}{{ $itemAreas = $itemAreas | append $a.slug }}{{ end }}{{ end }}{{ end }}{{ end -}}
+          {{- range $areas }}{{ $a := . }}{{ range $itemTags }}{{ if in $a.tags . }}{{ if not (in $itemAreas $a.slug) }}{{ $itemAreas = $itemAreas | append $a.slug }}{{ end }}{{ end }}{{ end }}{{ end -}}
           {{- $search := lower (printf "%s %s %s" .Title (delimit (.Params.authors | default slice) " ") (.Params.publication | default "")) -}}
           <article class="pub-item" data-tab="{{ $tab }}" data-year="{{ .Date.Format "2006" }}" data-areas="{{ delimit $itemAreas " " }}" data-slug="{{ .File.ContentBaseName }}" data-title="{{ lower .Title }}" data-search="{{ $search }}">
             <div class="pub-item__cite">

@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="container page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="{{ "/" | relURL }}">{{ i18n "back_home" }}</a> /
+    <a href="{{ "/teaching/" | relURL }}">Teaching</a> /
+    <span aria-current="page">{{ .Title }}</span>
+  </nav>
+  <article class="content-card prose">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    {{- with site.Data.teaching.doe.instructions }}
+    <p><a class="btn" href="{{ .url | relURL }}" target="_blank" rel="noopener">{{ .name }} (PDF)</a></p>
+    {{- end }}
+  </article>
+</div>
+{{ end }}

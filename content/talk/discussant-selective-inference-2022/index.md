@@ -6,4 +6,7 @@ publication_types: ["presentation"]
 publication: "International Seminar on Selective Inference, Online"
 tags: ["predictive inference", "statistical inference for AI/ML"]
 kind_note: "Invited discussant"
+links:
+  - name: "Selective Inference Seminar"
+    url: "https://www.selectiveinferenceseminar.com/past-talks"
 ---

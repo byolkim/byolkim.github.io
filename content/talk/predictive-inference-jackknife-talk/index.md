@@ -5,7 +5,10 @@ authors: ["Byol Kim"]
 publication_types: ["presentation"]
 publication: "Invited seminar and contributed posters (2020–2021)"
 tags: ["conformal prediction", "predictive inference", "statistical inference for AI/ML"]
-kind_note: "Invited seminar · contributed posters"
+kind_note: "Invited talk · contributed posters"
+links:
+  - name: "Selective Inference Seminar"
+    url: "https://www.selectiveinferenceseminar.com/past-talks"
 venues:
   - event: "International Seminar on Selective Inference (invited)"
     location: "Online"
