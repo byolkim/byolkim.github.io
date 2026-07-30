@@ -62,4 +62,3 @@ menu:
     - name: Contact
       url: /contact/
       weight: 60
-  # Note: the People page still builds at /authors/ but is no longer linked from the nav.
