@@ -24,7 +24,8 @@
   {{- $type := "article" }}{{ $vfield := "journal" -}}
   {{- if eq .Params.status "in_preparation" }}{{ $type = "unpublished" }}{{ $vfield = "note" }}
   {{- else if in $pt "presentation" }}{{ $type = "misc" }}{{ $vfield = "howpublished" }}
-  {{- else if in $pt "conference_paper" }}{{ $type = "inproceedings" }}{{ $vfield = "booktitle" }}{{ end -}}
+  {{- else if in $pt "conference_paper" }}{{ $type = "inproceedings" }}{{ $vfield = "booktitle" }}
+  {{- else if in $pt "report" }}{{ $type = "misc" }}{{ $vfield = "howpublished" }}{{ end -}}
   {{- $url := "" }}{{ with .Params.links }}{{ $url = (index . 0).url }}{{ end -}}
   {{- $e := printf "@%s{%s,\n  title = {%s},\n  author = {%s},\n  year = {%d},\n  %s = {%s},\n  url = {%s}\n}\n" $type .File.ContentBaseName .Title (delimit (.Params.authors | default slice) " and ") .Date.Year $vfield (.Params.publication | default "") $url -}}
   {{- $bib = merge $bib (dict .File.ContentBaseName $e) -}}
